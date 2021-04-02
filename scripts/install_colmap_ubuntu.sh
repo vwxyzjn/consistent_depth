@@ -1,7 +1,7 @@
 # Copyright (c) Facebook, Inc. and its affiliates.
 
 # Install packages
-sudo apt-get install \
+RUN sudo apt-get install -y \
     git \
     cmake \
     build-essential \
@@ -22,32 +22,31 @@ sudo apt-get install \
     libcgal-dev \
     libcgal-qt5-dev
 
-mkdir -p colmap-packages
-pushd colmap-packages
+RUN mkdir -p colmap-packages
+RUN pushd colmap-packages
 
-# Install ceres-solver [10-20 min]
-sudo apt-get install libatlas-base-dev libsuitesparse-dev
-git clone https://ceres-solver.googlesource.com/ceres-solver
-pushd ceres-solver
-git checkout $(git describe --tags) # Checkout the latest release
-mkdir build
-cd build
-cmake .. -DBUILD_TESTING=OFF -DBUILD_EXAMPLES=OFF
-make
-sudo make install
-popd  # pop ceres-solver
+RUN # Install ceres-solver [10-20 min]
+RUN sudo apt-get install libatlas-base-dev libsuitesparse-dev
+RUN git clone https://ceres-solver.googlesource.com/ceres-solver
+RUN pushd ceres-solver
+RUN git checkout $(git describe --tags) # Checkout the latest release
+RUN mkdir build
+RUN cd build
+RUN cmake .. -DBUILD_TESTING=OFF -DBUILD_EXAMPLES=OFF
+RUN make
+RUN sudo make install
+RUN popd  # pop ceres-solver
 
-# Install colmap-3.6
-git clone https://github.com/colmap/colmap
-pushd colmap
-git checkout dev
-git checkout tags/3.6-dev.3 -b dev-3.6
-mkdir build
-cd build
-cmake ..
-make
-sudo make install
-CC=/usr/bin/gcc-6 CXX=/usr/bin/g++-6 cmake ..
-popd  # pop colmap
-
-popd
+RUN # Install colmap-3.6
+RUN git clone https://github.com/colmap/colmap
+RUN pushd colmap
+RUN git checkout dev
+RUN git checkout tags/3.6-dev.3 -b dev-3.6
+RUN mkdir build
+RUN cd build
+RUN cmake ..
+RUN make
+RUN sudo make install
+RUN CC=/usr/bin/gcc-6 CXX=/usr/bin/g++-6 cmake ..
+RUN popd  # pop colmap
+RUN popd
